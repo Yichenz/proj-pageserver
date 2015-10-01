@@ -51,11 +51,7 @@ def serve(sock, func):
         _thread.start_new_thread(func, (clientsocket,))
 
 
-CAT = """
-     ^ ^
-   =(   )=
-   """
-
+CAT = open('trivia.html').read()
 
 def respond(sock):
     """
@@ -69,8 +65,11 @@ def respond(sock):
 
     parts = request.split()
     if len(parts) > 1 and parts[0] == "GET":
-        transmit("HTTP/1.0 200 OK\n\n", sock)
-        transmit(CAT, sock)
+        try:
+            transmit("HTTP/1.0 200 OK\n\n", sock)
+            transmit(CAT, sock)
+        except:
+            transmit("Error 404\nPage not found",sock)
     else:
         transmit("\nI don't handle this request: {}\n".format(request), sock)
 
